@@ -1,0 +1,71 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:		sparkles
+# Required-Start:	$local_fs $remote_fs $network $syslog
+# Required-Stop:	$local_fs $remote_fs $network $syslog
+# Default-Start:	2 3 4 5
+# Default-Stop:		0 1 6
+# Short-Description:	Start sparkles gunicorn daemon
+# Description:		Start sparkles gunicorn daemon
+### END INIT INFO
+
+# Edit /etc/default/sparkles to change these.
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+NAME=sparkles
+DESC=sparkles
+VIRTUAL_ENV=/opt/sparkles
+DAEMON=${VIRTUAL_ENV}/bin/gunicorn_django
+PIDFILE=${VIRTUAL_ENV}/run/sparkles.pid
+SETTINGS=${VIRTUAL_ENV}/sparkles/settings.py
+RUNAS=jart
+WORKERS=5
+BIND=127.0.0.1:7000
+test -r /etc/default/sparkles && . /etc/default/sparkles
+
+ARGS="--daemon --bind=$BIND --workers=$WORKERS --max-requests=1000 --pid=$PIDFILE $SETTINGS"
+
+set -e
+
+. /lib/lsb/init-functions
+
+case "$1" in
+  start)
+	echo -n "Starting $DESC: "
+	start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON --chuid $RUNAS -- $ARGS
+	echo "$NAME."
+	;;
+
+  stop)
+	echo -n "Stopping $DESC: "
+	start-stop-daemon --stop --pidfile $PIDFILE
+	echo "$NAME."
+	rm -f $PIDFILE
+	;;
+
+  restart|force-reload)
+	echo -n "Restarting $DESC: "
+	start-stop-daemon --stop --pidfile $PIDFILE
+	rm -f $PIDFILE
+	sleep 1
+	start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON --chuid $RUNAS -- $ARGS
+	echo "$NAME."
+	;;
+
+  reload)
+    echo -n "Reloading $DESC: "
+    start-stop-daemon --stop --signal HUP --pidfile $PIDFILE
+    echo "$NAME."
+    ;;
+
+  status)
+	status_of_proc $DAEMON $NAME
+	;;
+
+  *)
+	N=/etc/init.d/$NAME
+	echo "Usage: $N {start|stop|reload|restart|force-reload|status}" >&2
+	exit 1
+	;;
+esac
+
+exit 0

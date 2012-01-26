@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>{% block title %}sparkles{% endblock title %}</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <link rel="shortcut icon" href="{{ STATIC_URL }}sparkles/img/favicon.png" />
+  <meta name="description" content="{% block description %}sparkles{% endblock description %}" />
+  <link rel="canonical" href="{% block canonical %}{{ request.path }}{% endblock canonical %}" />
+  <link rel="stylesheet" href="{{ STATIC_URL }}sparkles/css/sparkles{% if not debug %}.min{% endif %}.css?v=2" type="text/css" media="all" />
+  <script src="{{ STATIC_URL }}js/modernizr{% if not debug %}.min{% endif %}.js"></script>
+  {% block extra_head %}
+  {% endblock extra_head %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  {% block body %}
+    <div id="header-container">
+      {% block header %}
+        <header class="wrapper clearfix">
+          <h1 id="title">h1#sparkles</h1>
+          <nav>
+            <ul>
+              <li><a href="#">nav ul li a</a></li>
+              <li><a href="#">nav ul li a</a></li>
+              <li><a href="#">nav ul li a</a></li>
+            </ul>
+          </nav>
+        </header>
+      {% endblock header %}
+    </div>
+    <div id="main-container">
+      {% block content %}
+      {% endblock content %}
+    </div>
+    <div id="footer-container">
+      {% block footer %}
+        <footer class="wrapper">
+          <h3>footer</h3>
+        </footer>
+      {% endblock footer %}
+    </div>
+  {% endblock body %}
+  {% block scripts %}
+    <script src="{{ STATIC_URL }}js/jquery{% if not debug %}.min{% endif %}.js"></script>
+    <script src="{{ STATIC_URL }}sparkles/js/sparkles{% if not debug %}.min{% endif %}.js?v=1"></script>
+  {% endblock scripts %}
+  <script>
+    $(function() {
+      {% block js_init %}
+      {% endblock js_init %}
+    });
+  </script>
+</body>
+</html>
