@@ -1,5 +1,5 @@
 {% extends "sparkles/base.html" %}
-{% block title %}Signup for an Account{% endblock %}
+{% block title %}Signup for an Account | {{ block.super }}{% endblock %}
 {% block page_title %}Signup for an Account{% endblock %}
 {% block page_subtitle %}We're pleased to meet you.{% endblock %}
 {% block body_class %}index{% endblock %}
@@ -17,27 +17,15 @@
   <h2>Account Information</h2>
   <form action="." method="post">{% csrf_token %}
     <fieldset>
-      <div class="clearfix {% if form.username.errors %}error{% endif %}">
-        {{ form.username.label_tag }}
-        <div class="input">
-          {{ form.username }}
-          <span class="help-block">{{ form.username.help_text }}</span>
-        </div>
-      </div><!-- /clearfix -->
-      <div class="clearfix {% if form.password.errors %}error{% endif %}">
-        {{ form.password.label_tag }}
-        <div class="input">
-          {{ form.password }}
-          <span class="help-block">{{ form.password.help_text }}</span>
-        </div>
-      </div><!-- /clearfix -->
-      <div class="clearfix {% if form.email.errors %}error{% endif %}">
-        {{ form.email.label_tag }}
-        <div class="input">
-          {{ form.email }}
-          <span class="help-block">{{ form.email.help_text }}</span>
-        </div>
-      </div><!-- /clearfix -->
+      {% for field in form %}
+        <div class="clearfix {% if field.errors %}error{% endif %}">
+          {{ field.label_tag }}
+          <div class="input">
+            {{ field }}
+            <span class="help-block">{{ field.help_text }}</span>
+          </div>
+        </div><!-- /clearfix -->
+      {% endfor %}
       <div class="actions">
         <input type="submit" class="btn primary" value="Save changes">&nbsp;
         <button type="reset" class="btn">Cancel</button>
@@ -55,3 +43,55 @@
   $("#id_username").focus();
   $("form .error input").first().focus();
 {% endblock js_init %}
+
+
+class SignupForm(forms.Form):
+    username = forms.RegexField(
+        label="Username", max_length=12, regex=r'^[a-zA-Z0-9]{3,12}$',
+        help_text="Required. Letters and digits only and 3-12 characters.",
+        error_messages={'required': 'Please pick a username',
+                        'invalid': ("Please enter only letters and digits in "
+                                    "your username between 3 and 12 chars.")})
+    password = forms.CharField(
+        label="Passphrase", widget=forms.PasswordInput,
+        min_length=6, max_length=128, help_text="At least 6 characters",
+        error_messages={'required': 'Please choose a password',
+                        'invalid': ("Please enter only letters and digits in "
+                                    "your username between 3 and 12 chars.")})
+    email = forms.EmailField(
+        label='Email', help_text="This is required",
+        error_messages={'required': 'Please enter your email address',
+                        'invalid': 'Bad email address'})
+
+    def clean_username(self):
+        username = self.data.get('username')
+        if db.User.objects.filter(username__iexact=username).count():
+            raise forms.ValidationError("Username is taken")
+        return username
+
+    def clean_email(self):
+        email = self.data.get('email')
+        if db.User.objects.filter(email__iexact=email).count():
+            raise forms.ValidationError("Bad email address")
+        return email
+
+    def save(self):
+        data = self.cleaned_data
+        user = db.User.objects.create_user(
+            data['username'], data['email'], data['password'])
+        return user
+
+
+def signup(request):
+    """Create an account"""
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            return HttpResponseRedirect('/')
+    else:
+        form = SignupForm()
+    return render_to_response(
+        "sparkles/signup.html", {'form': form},
+        context_instance=RequestContext(request))
+

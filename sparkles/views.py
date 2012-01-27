@@ -8,6 +8,7 @@ r"""
 """
 
 from django import forms
+from django.contrib import auth
 from django.conf import settings
 from django.template import RequestContext
 from django.shortcuts import render_to_response
@@ -26,7 +27,7 @@ def index(request):
 class SignupForm(forms.Form):
     username = forms.RegexField(
         label="Username", max_length=12, regex=r'^[a-zA-Z0-9]{3,12}$',
-        help_text="Required. Letters and digits only and 3-12 characters.",
+        help_text="Required. Letters and digits only, 3-12 characters.",
         error_messages={'required': 'Please pick a username',
                         'invalid': ("Please enter only letters and digits in "
                                     "your username between 3 and 12 chars.")})
@@ -37,9 +38,17 @@ class SignupForm(forms.Form):
                         'invalid': ("Please enter only letters and digits in "
                                     "your username between 3 and 12 chars.")})
     email = forms.EmailField(
-        label='Email', help_text="This is required",
+        label='Email', help_text="Required. Email Alerts & Verification",
+        widget=forms.TextInput(attrs={'placeholder': 'you@domain.com'}),
         error_messages={'required': 'Please enter your email address',
                         'invalid': 'Bad email address'})
+    phone = forms.RegexField(
+        label='Phone Number', required=False,
+        regex=r'^[2-9]\d\d-?[2-9]\d\d-?\d\d\d\d$',
+        widget=forms.TextInput(attrs={'placeholder': 'npa-nxx-xxxx'}),
+        help_text='Optional. SMS notifications (US/CA Only)',
+        error_messages={'required': 'Please enter your phone number',
+                        'invalid': 'Bad telephone number, try xxx-yyy-zzzz'})
 
     def clean_username(self):
         username = self.data.get('username')
@@ -59,7 +68,13 @@ def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
-            return HttpResponseRedirect(url + '?new=1')
+            if request.user.is_authenticated():
+                logout(request)
+            user = form.save()
+            user = auth.authenticate(username=form.cleaned_data['username'],
+                                     password=form.cleaned_data['password'])
+            auth.login(request, user)
+            return HttpResponseRedirect('/')
     else:
         form = SignupForm()
     return render_to_response(

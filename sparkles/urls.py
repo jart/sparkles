@@ -8,6 +8,7 @@ r"""
 """
 
 from django.conf import settings
+from django.views.generic import TemplateView
 from django.conf.urls.defaults import patterns, url, include
 from django.views.decorators.http import require_GET, require_POST
 
@@ -18,7 +19,7 @@ adminsite = AdminSite(name="sparkles_admin")
 urlpatterns = patterns("",
     url(r"^$", "sparkles.views.index", name="index"),
     url(r"^signup/$", "sparkles.views.signup", name="signup"),
-    # url(r"^article/(?P<slug>[-_\d\w]+)/$", "sparkles.views.article", name="article"),
+    url(r'^about/$', TemplateView.as_view(template_name="sparkles/about.html"), name="about"),
     url(r"^error/$", "sparkles.views.error", name="error"),
     url(r"^admin/", include(adminsite.urls)),
 )

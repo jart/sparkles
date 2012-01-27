@@ -80,7 +80,10 @@
               <button class="btn primary" type="submit">Sign in</button>
             </form>
           {% else %}
-            <span>Welcome {{ user.username }}</span>
+            <ul class="nav secondary-nav">
+              <li><a href="/{{ user.username }}/">{{ user.username }}</a></li>
+              <li><a href="/logout/">Logout</a></li>
+            </div>
           {% endif %}
         </div>
       </div>

@@ -22,7 +22,7 @@ setup(
     author               = "Justine Tunney",
     author_email         = "jtunney@lobstertech.com",
     license              = "GNU AGPL v3 or later",
-    install_requires     = ["Django", "south", "django-reversion",
+    install_requires     = ["Django", "south",
                             "python-memcached", "django-debug-toolbar",
                             "cssmin", "slimit"],
     packages             = find_packages(),
