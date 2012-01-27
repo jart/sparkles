@@ -14,7 +14,7 @@
       <div class="alert-message error">{{ error }}</div>
     {% endfor %}
   {% endfor %}
-  <h2>Information</h2>
+  <h2>Account Information</h2>
   <form action="." method="post">{% csrf_token %}
     <fieldset>
       <div class="clearfix {% if form.username.errors %}error{% endif %}">
@@ -45,6 +45,11 @@
     </fieldset>
   </form>
 {% endblock content %}
+
+{% block sidebar %}
+  <h3>The Signup Sloth</h3>
+  <img src="http://i.imgur.com/zUDh3.jpg" />
+{% endblock sidebar %}
 
 {% block js_init %}{{ block.super }}
   $("#id_username").focus();
