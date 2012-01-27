@@ -17,6 +17,7 @@ adminsite = AdminSite(name="sparkles_admin")
 
 urlpatterns = patterns("",
     url(r"^$", "sparkles.views.index", name="index"),
+    url(r"^signup/$", "sparkles.views.signup", name="signup"),
     # url(r"^article/(?P<slug>[-_\d\w]+)/$", "sparkles.views.article", name="article"),
     url(r"^error/$", "sparkles.views.error", name="error"),
     url(r"^admin/", include(adminsite.urls)),

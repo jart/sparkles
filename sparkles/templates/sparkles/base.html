@@ -2,43 +2,118 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>{% block title %}sparkles{% endblock title %}</title>
+  <title>{% block title %}Sparkles!{% endblock title %}</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <link rel="shortcut icon" href="{{ STATIC_URL }}sparkles/img/favicon.png" />
   <meta name="description" content="{% block description %}sparkles{% endblock description %}" />
   <link rel="canonical" href="{% block canonical %}{{ request.path }}{% endblock canonical %}" />
-  <link rel="stylesheet" href="{{ STATIC_URL }}sparkles/css/sparkles{% if not debug %}.min{% endif %}.css?v=2" type="text/css" media="all" />
-  <script src="{{ STATIC_URL }}js/modernizr{% if not debug %}.min{% endif %}.js"></script>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}bootstrap/bootstrap{% if not debug %}.min{% endif %}.css">
+  {% if debug %}
+    <script src="{{ STATIC_URL }}js/less.min.js"></script>
+    <link rel="stylesheet" href="{{ STATIC_URL }}sparkles/css/sparkles.less" type="text/css" media="all" />
+  {% else %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}sparkles/css/sparkles.min.css" type="text/css" media="all" />
+  {% endif %}
+  <style>
+    html, body { background-color: #eee; }
+    body { padding-top: 40px; }
+    .container > footer p { text-align: center; }
+    a.btn { color: #404040; text-shadow: none; }
+
+    /* The white background content wrapper */
+    .content {
+      background-color: #fff;
+      padding: 20px;
+      margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+      -webkit-border-radius: 0 0 6px 6px;
+         -moz-border-radius: 0 0 6px 6px;
+              border-radius: 0 0 6px 6px;
+      -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+         -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+              box-shadow: 0 1px 2px rgba(0,0,0,.15);
+    }
+
+    /* Page header tweaks */
+    .page-header {
+      background-color: #f5f5f5;
+      padding: 20px 20px 10px;
+      margin: -20px -20px 20px;
+    }
+
+    .content .span12,
+    .content .span4 { min-height: 500px; }
+    .content .span12 { width: 680px; margin-right: 20px; }
+
+    /* Give a quick and non-cross-browser friendly divider */
+    .content .span4 {
+      margin-left: 0;
+      padding-left: 19px;
+      border-left: 1px solid #eee;
+    }
+    .topbar .btn {
+      border: 0;
+    }
+  </style>
   {% block extra_head %}
   {% endblock extra_head %}
 </head>
-<body class="{% block body_class %}{% endblock %}">
+<body class="conapp {% block body_class %}{% endblock %}">
   {% block body %}
-    <div id="header-container">
-      {% block header %}
-        <header class="wrapper clearfix">
-          <h1 id="title">h1#sparkles</h1>
-          <nav>
-            <ul>
-              <li><a href="#">nav ul li a</a></li>
-              <li><a href="#">nav ul li a</a></li>
-              <li><a href="#">nav ul li a</a></li>
-            </ul>
-          </nav>
-        </header>
-      {% endblock header %}
-    </div>
-    <div id="main-container">
-      {% block content %}
-      {% endblock content %}
-    </div>
-    <div id="footer-container">
-      {% block footer %}
-        <footer class="wrapper">
-          <h3>footer</h3>
-        </footer>
-      {% endblock footer %}
-    </div>
+
+    <nav class="topbar">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="/">Sparkles!</a>
+          <ul class="nav">
+            <li class="{% block nav_home_class %}{% endblock %}"><a href="/">Home</a></li>
+            <li class="{% block nav_new_class %}{% endblock %}"><a href="/new/">New</a></li>
+            <li class="{% block nav_browse_class %}{% endblock %}"><a href="/browse/">Browse</a></li>
+            <li class="{% block nav_about_class %}{% endblock %}"><a href="/about/">About</a></li>
+            {% if not user.is_authenticated %}
+              <li class="{% block nav_signup_class %}{% endblock %}"><a href="/signup/">Signup</a></li>
+            {% endif %}
+          </ul>
+          {% if not user.is_authenticated %}
+            <form action="" class="pull-right">
+              <input class="input-small" type="text" placeholder="Username">
+              <input class="input-small" type="password" placeholder="Password">
+              <button class="btn primary" type="submit">Sign in</button>
+            </form>
+          {% else %}
+            <span>Welcome {{ user.username }}</span>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="content">
+        <header class="page-header">{% block page_header %}
+          <h1>
+            {% block page_title %}Sparkles{% endblock %}
+            <img src="{{ STATIC_URL }}sparkles/img/favicon.png" width="16" height="16" />
+            <small>{% block page_subtitle %}Build Consensus &amp; Make Decisions{% endblock %}</small>
+          </h1>
+        {% endblock page_header %}</header>
+        <div class="row">
+          <div class="span12">
+            {% block content %}
+            {% endblock content %}
+          </div>
+          <div class="span4">
+            {% block sidebar %}
+            {% endblock sidebar %}
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <p>&copy; Justine Tunney 2012</p>
+      </footer>
+
+    </div> <!-- /container -->
+
   {% endblock body %}
   {% block scripts %}
     <script src="{{ STATIC_URL }}js/jquery{% if not debug %}.min{% endif %}.js"></script>
