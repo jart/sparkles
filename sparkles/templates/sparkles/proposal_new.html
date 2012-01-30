@@ -1,0 +1,35 @@
+{% extends "sparkles/base.html" %}
+{% block title %}New Proposal | {{ block.super }}{% endblock %}
+{% block page_title %}New Proposal{% endblock %}
+{% block page_subtitle %}Can I get a temperature check?{% endblock %}
+{% block body_class %}proposal_new{% endblock %}
+{% block nav_prop_new_class %}active{% endblock %}
+
+{% block content %}
+  <form action="." method="post">{% csrf_token %}
+    {% include "sparkles/form_errors.html" %}
+    {% if signup_form %}
+      {% with form=signup_form %}
+        {% include "sparkles/form_errors.html" %}
+        <h2>Signup Form</h2>
+        {% include "sparkles/form_fields.html" %}
+      {% endwith %}
+    {% endif %}
+    <h2>Proposal Form</h2>
+    {% include "sparkles/form_fields.html" %}
+    <div class="actions">
+      <input type="submit" class="btn primary" value="Save changes">&nbsp;
+      <button type="reset" class="btn">Cancel</button>
+    </div>
+  </form>
+{% endblock content %}
+
+{% block sidebar %}
+  <h3>Point of Slothness</h3>
+  <img src="http://i.imgur.com/zUDh3.jpg" />
+{% endblock sidebar %}
+
+{% block js_init %}{{ block.super }}
+  $("input").first().focus();
+  $("form .error input").first().focus();
+{% endblock js_init %}

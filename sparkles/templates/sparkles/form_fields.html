@@ -1,0 +1,11 @@
+<fieldset>
+  {% for field in form %}
+    <div class="clearfix {% if field.errors %}error{% endif %}">
+      {{ field.label_tag }}
+      <div class="input">
+        {{ field }}
+        <span class="help-block xlarge">{{ field.help_text }}</span>
+      </div>
+    </div><!-- /clearfix -->
+  {% endfor %}
+</fieldset>

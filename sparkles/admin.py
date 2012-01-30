@@ -12,7 +12,7 @@ from django.contrib import admin
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 
-from sparkles import models as db
+# from sparkles import models as db
 
 
 class AdminSite(admin.AdminSite):

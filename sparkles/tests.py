@@ -10,7 +10,7 @@ class BasicTest(TestCase):
         pass
 
     def test_index(self):
-        url = reverse("sparkles.views.index")
+        url = '/'  # reverse("sparkles.views.index")
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 

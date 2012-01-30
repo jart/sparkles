@@ -1,8 +1,8 @@
 settings_local.py
 /sparkles.sqlite3
-/sparkles/static/sparkles/js/*.min.js
-/sparkles/static/sparkles/css/*.min.css
-core
+/sparkles/static/sparkles/js/*.js
+/sparkles/static/sparkles/css/*.css
+\core
 *.pyc
 *.pyo
 *.pyc

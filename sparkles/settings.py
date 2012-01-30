@@ -29,6 +29,7 @@ ROOT_URLCONF = "sparkles.urls"
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 SESSION_COOKIE_HTTPONLY = True
 USE_X_FORWARDED_HOST = True
+LOGIN_REDIRECT_URL = '/'
 
 BOLD = "\x1b[1m"
 GREEN = "\x1b[32m"
@@ -86,14 +87,14 @@ TEMPLATE_CONTEXT_PROCESSORS = [
 ]
 
 INSTALLED_APPS = [
-    "sparkles",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     'django.contrib.staticfiles',
     "django.contrib.sessions",
     "django.contrib.admin",
     "south",
-    # "reversion",
+    "gravatar",
+    "sparkles",
 ]
 
 LOGGING = {
