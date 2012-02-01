@@ -30,10 +30,11 @@
           <a class="brand" href="/">Sparkles!</a>
           <ul class="nav">
             <li class="{% block nav_home_class %}{% endblock %}"><a href="/">Home</a></li>
-            <li class="{% block nav_prop_new_class %}{% endblock %}"><a href="/p/new/">New Prop</a></li>
-            <li class="{% block nav_poll_new_class %}{% endblock %}"><a href="/o/new/">New Poll</a></li>
-            <li class="{% block nav_group_new_class %}{% endblock %}"><a href="/g/new/">New Group</a></li>
-            {% if not user.is_authenticated %}
+            {% if user.is_authenticated %}
+              <li class="{% block nav_prop_new_class %}{% endblock %}"><a href="/p/new/">New Prop</a></li>
+              <li class="{% block nav_poll_new_class %}{% endblock %}"><a href="/o/new/">New Poll</a></li>
+              <li class="{% block nav_group_new_class %}{% endblock %}"><a href="/g/new/">New Group</a></li>
+            {% else %}
               <li class="{% block nav_signup_class %}{% endblock %}"><a href="/signup/">Sign up</a></li>
             {% endif %}
             <li class="{% block nav_about_class %}{% endblock %}"><a href="/about/">About</a></li>

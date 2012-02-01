@@ -26,3 +26,6 @@ pro:
 		>sparkles/static/sparkles/css/sparkles.min.css
 	sparkles migrate
 	sparkles collectstatic --noinput
+
+deps:
+	apt-get install -y lessc uglifyjs
