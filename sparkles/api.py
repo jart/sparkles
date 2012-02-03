@@ -14,6 +14,8 @@ r"""
 
 """
 
+from datetime import timedelta
+
 import phonenumbers
 from django.core import mail
 from django.conf import settings
@@ -32,7 +34,10 @@ def _try_to_get_ip(args):
 
 def verify_email(email, **kwargs):
     ip = _try_to_get_ip(kwargs)
-    yesterday = utils.now() - utils.day
+    yesterday = utils.now() - timedelta(days=1)
+    five = utils.now() - timedelta(seconds=5)
+    if db.EmailVerify.objects.filter(email=email, created__gt=five).count():
+        return []
     invalid = False
     invalid |= (not email_re.match(email))
     invalid |= (db.User.objects.filter(email=email).count() > 0)
@@ -64,7 +69,10 @@ def verify_phone(phone, **kwargs):
         raise utils.APIException('We only support US/CA numbers now :(')
     phone = utils.e164(phone)
     ip = _try_to_get_ip(kwargs)
-    yesterday = utils.now() - utils.day
+    yesterday = utils.now() - timedelta(days=1)
+    five = utils.now() - timedelta(seconds=5)
+    if db.PhoneVerify.objects.filter(phone=phone, created__gt=five).count():
+        return []
     invalid = False
     invalid |= (db.UserInfo.objects.filter(phone=phone).count() > 0)
     invalid |= (db.PhoneBlacklist.objects.filter(phone=phone).count() > 0)
@@ -85,7 +93,10 @@ def verify_phone(phone, **kwargs):
 
 def verify_xmpp(xmpp, **kwargs):
     ip = _try_to_get_ip(kwargs)
-    yesterday = utils.now() - utils.day
+    yesterday = utils.now() - timedelta(days=1)
+    five = utils.now() - timedelta(seconds=5)
+    if db.XmppVerify.objects.filter(xmpp=xmpp, created__gt=five).count():
+        return []
     invalid = False
     invalid |= (not email_re.match(xmpp))
     invalid |= (db.UserInfo.objects.filter(xmpp=xmpp).count() > 0)

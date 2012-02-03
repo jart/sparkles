@@ -13,7 +13,7 @@ import logging
 import traceback
 from decimal import Decimal
 from functools import wraps
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import phonenumbers
 from django.conf import settings
@@ -23,7 +23,6 @@ from django.utils.timezone import utc
 
 
 logger = logging.getLogger(__name__)
-day = timedelta(days=1)
 
 
 class APIException(Exception):
