@@ -85,10 +85,6 @@ class Workgroup(models.Model):
         When was this first created?""")
     content = models.TextField(blank=True, help_text="""
         A description of this group""")
-    is_public = models.BooleanField(default=True, help_text="""
-        Is this a secret shadow group?""")
-    is_inviteonly = models.BooleanField(default=False, help_text="""
-        Assuming it's public, can anyone just decide to join?""")
 
     @models.permalink
     def get_absolute_url(self):
@@ -247,12 +243,20 @@ class EmailBlacklist(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     reason = models.TextField()
 
+    class Meta:
+        verbose_name = 'Blacklisted Email'
+        verbose_name_plural = 'Email Blacklist'
+
 
 class PhoneBlacklist(models.Model):
     """Never call/text these people under any circumstances"""
     phone = models.CharField(max_length=255, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     reason = models.TextField()
+
+    class Meta:
+        verbose_name = 'Blacklisted Phone Number'
+        verbose_name_plural = 'Phone Number Blacklist'
 
 
 class EmailVerify(models.Model):
@@ -264,6 +268,8 @@ class EmailVerify(models.Model):
 
     class Meta:
         unique_together = ("email", "code")
+        verbose_name = 'Email Verification Entry'
+        verbose_name_plural = 'Email Verification Log'
 
 
 class PhoneVerify(models.Model):
@@ -275,6 +281,8 @@ class PhoneVerify(models.Model):
 
     class Meta:
         unique_together = ("phone", "code")
+        verbose_name = 'Phone Verification Entry'
+        verbose_name_plural = 'Phone Verification Log'
 
 
 class XmppVerify(models.Model):
@@ -286,6 +294,8 @@ class XmppVerify(models.Model):
 
     class Meta:
         unique_together = ("xmpp", "code")
+        verbose_name = 'XMPP Verification Entry'
+        verbose_name_plural = 'XMPP Verification Log'
 
 
 class SmsMessage(models.Model):
@@ -299,6 +309,10 @@ class SmsMessage(models.Model):
     is_egress = models.BooleanField(help_text="""
         True if this message was sent by us""")
 
+    class Meta:
+        verbose_name = 'SMS Message'
+        verbose_name_plural = 'SMS Messages'
+
 
 class XmppMessage(models.Model):
     """History of all sent/received xmpp messages"""
@@ -310,3 +324,7 @@ class XmppMessage(models.Model):
     content = models.TextField()
     is_egress = models.BooleanField(help_text="""
         True if this message was sent by us""")
+
+    class Meta:
+        verbose_name = 'XMPP Message'
+        verbose_name_plural = 'XMPP Messages'
