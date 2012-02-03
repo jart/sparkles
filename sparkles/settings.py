@@ -13,6 +13,18 @@ from datetime import timedelta
 from os.path import abspath, dirname, join, exists
 project_root = dirname(abspath(__file__))
 
+SPARK_AUTH_MAX_EMAIL_DAY = 2
+SPARK_AUTH_MAX_PHONE_DAY = 2
+SPARK_AUTH_MAX_XMPP_DAY = 4
+
+TWILIO_SID = ''
+TWILIO_TOKEN = ''
+TWILIO_PHONE = '+16465536361'
+
+XMPP_JID = 'sparkles.test@jabber.org'
+XMPP_PASSWORD = 'N2JpUd4RaEGc'
+XMPP_SERVER = ('jabber.org', 5222)
+
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 SECRET_KEY = "please change me to some wacky random value"
@@ -95,6 +107,15 @@ INSTALLED_APPS = [
     "south",
     "gravatar",
     "sparkles",
+]
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.SHA1PasswordHasher',
+    'django.contrib.auth.hashers.MD5PasswordHasher',
+    'django.contrib.auth.hashers.CryptPasswordHasher',
 ]
 
 LOGGING = {

@@ -11,6 +11,12 @@ dev:
 	pyflakes sparkles/views.py
 	pep8     sparkles/tests.py
 	pyflakes sparkles/tests.py
+	pep8     sparkles/utils.py
+	pyflakes sparkles/utils.py
+	pep8     sparkles/api.py
+	pyflakes sparkles/api.py
+	pep8     sparkles/message.py
+	pyflakes sparkles/message.py
 	sparkles-dev syncdb
 	sparkles-dev migrate
 	sparkles-dev test sparkles
@@ -20,12 +26,12 @@ pro:
 	pip install -e .
 	lessc sparkles/static/sparkles/css/sparkles.less \
 		sparkles/static/sparkles/css/sparkles.css
+	lessc -x sparkles/static/sparkles/css/sparkles.less \
+		sparkles/static/sparkles/css/sparkles.min.css
 	coffee -o sparkles/static/sparkles/js \
 		sparkles/static/sparkles/js/sparkles.coffee
-	cssmin <sparkles/static/sparkles/css/sparkles.css \
-		>sparkles/static/sparkles/css/sparkles.min.css
 	sparkles migrate
 	sparkles collectstatic --noinput
 
 deps:
-	apt-get install -y lessc uglifyjs
+	apt-get install -y python python-dev lessc uglifyjs

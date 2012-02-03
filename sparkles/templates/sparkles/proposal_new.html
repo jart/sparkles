@@ -8,13 +8,6 @@
 {% block content %}
   <form action="." method="post">{% csrf_token %}
     {% include "sparkles/form_errors.html" %}
-    {% if signup_form %}
-      {% with form=signup_form %}
-        {% include "sparkles/form_errors.html" %}
-        <h2>Signup Form</h2>
-        {% include "sparkles/form_fields.html" %}
-      {% endwith %}
-    {% endif %}
     <h2>Proposal Form</h2>
     {% include "sparkles/form_fields.html" %}
     <div class="actions">

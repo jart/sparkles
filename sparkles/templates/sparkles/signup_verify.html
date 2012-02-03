@@ -1,0 +1,58 @@
+{% extends "sparkles/base.html" %}
+{% block title %}Signup for an Account | {{ block.super }}{% endblock %}
+{% block page_title %}Verify Your Contact Information{% endblock %}
+{% block page_subtitle %}So we can make sure you are you{% endblock %}
+{% block body_class %}signup{% endblock %}
+{% block nav_signup_class %}active{% endblock %}
+
+{% block content %}
+  <style>fieldset { padding-top: 0; }</style>
+  <form action="." method="post">{% csrf_token %}
+    {% include "sparkles/form_errors.html" %}
+    <fieldset>
+      <div class="clearfix {% if form.email_code.errors %}error{% endif %}">
+        {{ form.email_code.label_tag }}
+        <div class="input">
+          {{ form.email_code }}
+          <a href="#" id="resend_email" class="btn">Resend</a>
+          <span class="help-block xlarge">{{ form.email_code.help_text }}</span>
+        </div>
+      </div><!-- /clearfix -->
+      <div class="clearfix {% if form.phone_code.errors %}error{% endif %}">
+        {{ form.phone_code.label_tag }}
+        <div class="input">
+          {{ form.phone_code }}
+          <a href="#" id="resend_phone" class="btn">Resend</a>
+          <span class="help-block xlarge">{{ form.phone_code.help_text }}</span>
+        </div>
+      </div><!-- /clearfix -->
+      <div class="clearfix {% if not data.xmpp %}hide{% endif %} {% if form.xmpp_code.errors %}error{% endif %}">
+        {{ form.xmpp_code.label_tag }}
+        <div class="input">
+          {{ form.xmpp_code }}
+          <a href="#" id="resend_xmpp" class="btn">Resend</a>
+          <span class="help-block xlarge">{{ form.xmpp_code.help_text }}</span>
+        </div>
+      </div><!-- /clearfix -->
+    </fieldset>
+    <div class="actions">
+      <input type="submit" class="btn primary" value="Next step...">&nbsp;
+      <button type="reset" class="btn">Cancel</button>
+    </div>
+  </form>
+{% endblock content %}
+
+{% block sidebar %}
+  <p><img src="http://i.imgur.com/zUDh3.jpg" /></p>
+  <h3>Why so many questions?</h3>
+  <p>
+    We require personal contact information because this is a tool for people
+    who're serious.  We're not going to sell it, we simply want to provide
+    effective communication between people making real life decisions.
+  </p>
+{% endblock sidebar %}
+
+{% block js_init %}{{ block.super }}
+  $('.content input[type="text"]').first().focus();
+  $("form .error input").first().focus();
+{% endblock js_init %}
