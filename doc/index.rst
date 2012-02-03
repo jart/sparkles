@@ -19,7 +19,5 @@ Modules
    :members:
 .. automodule:: sparkles.middleware
    :members:
-.. automodule:: sparkles.phonenum
-   :members:
 .. automodule:: sparkles.utils
    :members:

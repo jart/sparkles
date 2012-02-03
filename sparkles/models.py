@@ -77,14 +77,63 @@ def ensure_userinfo(sender, instance, **kwargs):
         instance.userinfo = UserInfo.objects.create(user=instance)
 
 
+class Friend(models.Model):
+    """Allow two users to be able to interract with one another
+
+    Being friends with someone allows you to add them to proposals.  You'll
+    also be able to follow what they're doing in the status feed.
+
+    For each (user1, user2) entry there MUST BE a corresponding (user2, user1)
+    entry.
+    """
+    user = models.ForeignKey(User, related_name='friend_user_set')
+    friend = models.ForeignKey(User, related_name='friend_friend_set')
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user", "friend")
+        ordering = ("user__username", "friend__username")
+
+
+class FriendRequest(models.Model):
+    """Ask someone to be your friend
+
+    Once you're friends with someone, that's it! Trust is established and they
+    can invite you to whatever goofy proposal they want thereby bombarding
+    your phone with text messages. So friend wisely my friends.
+    """
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('denied', 'Denied'),
+    )
+
+    user = models.ForeignKey(User, related_name='friendrequest_user_set')
+    friend = models.ForeignKey(User, related_name='friendrequest_friend_set')
+    created = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=255, choices=STATUS_CHOICES,
+                              default='pending')
+    is_viewed = models.BooleanField()
+
+    class Meta:
+        unique_together = ("user", "friend")
+        ordering = ("user__username", "friend__username")
+
+
 class Workgroup(models.Model):
-    """A model for fabulous ideas"""
+    """Represents a group of users working towards a common goal
+
+    Workgroups are a convenient way to get a temperature check from everyone
+    in your affinity group without having to remember every person's name and
+    inviting them one by one for each proposal.
+    """
     username = models.CharField(max_length=255, unique=True, help_text="""
         A unique name with only letters and numbers""")
     created = models.DateTimeField(auto_now_add=True, help_text="""
         When was this first created?""")
     content = models.TextField(blank=True, help_text="""
         A description of this group""")
+    members = models.ManyToManyField(User, through='WorkgroupMember')
 
     @models.permalink
     def get_absolute_url(self):
@@ -96,10 +145,11 @@ class Workgroup(models.Model):
 
 class WorkgroupMember(models.Model):
     """Associate users with a working group"""
-    workgroup = models.ForeignKey(Workgroup, related_name='members')
+    workgroup = models.ForeignKey(Workgroup)
     user = models.ForeignKey(User)
     created = models.DateTimeField(auto_now_add=True, help_text="""
         When did they join?""")
+    is_admin = models.BooleanField()
 
     class Meta:
         unique_together = ("workgroup", "user")
@@ -108,8 +158,14 @@ class WorkgroupMember(models.Model):
 
 class Proposal(models.Model):
     """A model for fabulous ideas"""
+    PRIVACY_CHOICES = (
+        ('public', 'Public'),  # 
+        ('semipub', 'Semi-Public'),  # friends of friends
+        ('private', 'Private'),  # members only, only creator can invite
+    )
+
     sid = models.CharField(max_length=255, unique=True, help_text="""
-        A randomly generated secure id for URLs""")
+        A randomly generated secure id for urls""")
     user = models.ForeignKey(User, help_text="""
         Who started this proposal?""")
     title = models.CharField(max_length=255, help_text="""
@@ -119,6 +175,13 @@ class Proposal(models.Model):
     workgroup = models.ForeignKey(
         Workgroup, null=True, blank=True, related_name='proposals',
         help_text="Optionally associate proposal with a working group")
+    privacy = models.CharField(max_length=255, choices=PRIVACY_CHOICES,
+                               default='semipub', help_text="""
+        Semi-public is the default which means anyone who's friends with a
+        member can see this proposal. Public means anyone can see it. In
+        public and semi-public mode, any member can add more members. Private
+        means that only members can view the proposal and the only person
+        who can add more members is the one who created the proposal.""")
 
     @models.permalink
     def get_absolute_url(self):
@@ -166,7 +229,6 @@ class ProposalMember(models.Model):
     """Who is actually participating in a proposal?"""
     prop = models.ForeignKey(Proposal, related_name='members')
     user = models.ForeignKey(User)
-    inviter = models.ForeignKey(User, related_name='proposalmember_set2')
     created = models.DateTimeField(auto_now_add=True, help_text="""
         When were they invited to collaborate?""")
     is_abstain = models.BooleanField()
