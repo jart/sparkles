@@ -1,0 +1,9 @@
+include README.rst
+include Makefile
+include notes.org
+include conf/init.d/sparkles
+include conf/nginx/nginx.conf
+include conf/nginx/sparkles.conf
+include doc/index.rst
+include doc/Makefile
+include doc/conf.py

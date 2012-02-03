@@ -6,7 +6,7 @@
 
 :name:        sparkles
 :description: sparkles
-:copyright:   © 2012 Justine Tunney
+:copyright:   © 2012 Justine Alexandra Roberts Tunney
 :license:     GNU AGPL v3 or later
 
 
@@ -22,6 +22,7 @@ Install from git into a virtualenv::
     source ../bin/activate
     git clone git://github.com/jart/sparkles.git
     cd sparkles
+    make deps
     make
 
 How to run a debug server::
@@ -30,5 +31,4 @@ How to run a debug server::
 
 How to run a non-debug server::
 
-    sudo apt-get install coffeescript lessc
     make pro && sparkles runserver

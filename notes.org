@@ -1,6 +1,7 @@
-* Sparkles Hours
-** Messaging
-   CLOCK: [2012-02-03 Fri 02:51]
+* Justine's Hours
+** System Design
+   CLOCK: [2012-02-03 Fri 02:51]--[2012-02-03 Fri 04:30] =>  1:39
+** Signup & Messaging
    CLOCK: [2012-02-02 Thu 22:43]--[2012-02-03 Fri 02:42] =>  3:59
    CLOCK: [2012-02-02 Thu 22:25]--[2012-02-02 Thu 22:36] =>  0:11
    CLOCK: [2012-02-02 Thu 22:00]--[2012-02-02 Thu 22:24] =>  0:24

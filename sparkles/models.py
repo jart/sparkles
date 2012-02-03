@@ -99,8 +99,8 @@ class FriendRequest(models.Model):
     """Ask someone to be your friend
 
     Once you're friends with someone, that's it! Trust is established and they
-    can invite you to whatever goofy proposal they want thereby bombarding
-    your phone with text messages. So friend wisely my friends.
+    can add you to whatever goofy proposal they want, thereby bombarding your
+    phone with text messages. So friend wisely my friends.
     """
     STATUS_CHOICES = (
         ('pending', 'Pending'),
@@ -117,7 +117,6 @@ class FriendRequest(models.Model):
 
     class Meta:
         unique_together = ("user", "friend")
-        ordering = ("user__username", "friend__username")
 
 
 class Workgroup(models.Model):
@@ -159,9 +158,9 @@ class WorkgroupMember(models.Model):
 class Proposal(models.Model):
     """A model for fabulous ideas"""
     PRIVACY_CHOICES = (
-        ('public', 'Public'),  # 
-        ('semipub', 'Semi-Public'),  # friends of friends
-        ('private', 'Private'),  # members only, only creator can invite
+        ('public', 'Public'),
+        ('semipub', 'Semi-Public'),
+        ('private', 'Private'),
     )
 
     sid = models.CharField(max_length=255, unique=True, help_text="""
@@ -172,9 +171,6 @@ class Proposal(models.Model):
         A single line description""")
     created = models.DateTimeField(auto_now_add=True, help_text="""
         When was this first created?""")
-    workgroup = models.ForeignKey(
-        Workgroup, null=True, blank=True, related_name='proposals',
-        help_text="Optionally associate proposal with a working group")
     privacy = models.CharField(max_length=255, choices=PRIVACY_CHOICES,
                                default='semipub', help_text="""
         Semi-public is the default which means anyone who's friends with a

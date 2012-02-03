@@ -34,7 +34,7 @@ pro:
 	sparkles collectstatic --noinput
 
 deps:
-	apt-get install -y python python-dev lessc uglifyjs
+	apt-get install -y python python-dev lessc coffeescript
 
 newdb:
 	rm -f sparkles.sqlite3
