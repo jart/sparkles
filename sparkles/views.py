@@ -70,7 +70,8 @@ class SignupForm(forms.Form):
         phone = phonenumbers.parse(self.data.get('phone'), 'US')
         if not phonenumbers.is_valid_number(phone):
             raise forms.ValidationError("Invalid phone number")
-        if phone.country_code != '1':
+        if phone.country_code != 1:
+            print phone.country_code
             raise forms.ValidationError('We only support US/CA numbers now')
         phone = utils.e164(phone)
         invalid = False
@@ -93,15 +94,15 @@ class SignupForm(forms.Form):
 
 class SignupVerifyForm(forms.Form):
     email_code = forms.CharField(
-        label="Email Verification Code",
+        label="Email Verify Code",
         help_text="Please check your email inbox for the code we sent you",
         error_messages={'required': 'Please enter email address verify code'})
     phone_code = forms.CharField(
-        label="Phone Verification Code",
+        label="Phone Verify Code",
         help_text="Please check your text messages for the code we sent you",
         error_messages={'required': 'Please enter phone number verify code'})
     xmpp_code = forms.CharField(
-        label="XMPP Verification Code", required=False)
+        label="XMPP Verify Code", required=False)
 
     def clean_email(self):
         email = self.data.get('email')
@@ -153,7 +154,7 @@ def signup(request):
             if form.cleaned_data['xmpp']:
                 api.verify_xmpp(form.cleaned_data['xmpp'])
             request.session['signup'] = form.cleaned_data
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/signup/verify/')
     else:
         form = SignupForm(initial=request.session.get('signup', {}))
     return render_to_response(
@@ -170,7 +171,7 @@ def signup_verify(request):
         data.update(request.session['signup'])
         form = SignupVerifyForm(data)
         if form.is_valid():
-            data = form.cleaned_data
+            data = request.session['signup']
             user = db.User.objects.create_user(
                 data['username'], data['email'], data['password'])
             user.userinfo.phone = data['phone']

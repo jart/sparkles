@@ -2,10 +2,15 @@
 {% block title %}Signup for an Account | {{ block.super }}{% endblock %}
 {% block page_title %}Verify Your Contact Information{% endblock %}
 {% block page_subtitle %}So we can make sure you are you{% endblock %}
-{% block body_class %}signup{% endblock %}
+{% block body_class %}signup signup_verify{% endblock %}
 {% block nav_signup_class %}active{% endblock %}
 
 {% block content %}
+  <script>
+    var g_email = '{{ data.email|escapejs }}';
+    var g_phone = '{{ data.phone|escapejs }}';
+    var g_xmpp = '{{ data.xmpp|escapejs }}';
+  </script>
   <style>fieldset { padding-top: 0; }</style>
   <form action="." method="post">{% csrf_token %}
     {% include "sparkles/form_errors.html" %}
@@ -15,6 +20,7 @@
         <div class="input">
           {{ form.email_code }}
           <a href="#" id="resend_email" class="btn">Resend</a>
+          <span id="resend_email_sent" class="hide">Sent!</span>
           <span class="help-block xlarge">{{ form.email_code.help_text }}</span>
         </div>
       </div><!-- /clearfix -->
@@ -23,6 +29,7 @@
         <div class="input">
           {{ form.phone_code }}
           <a href="#" id="resend_phone" class="btn">Resend</a>
+          <span id="resend_xmpp_sent" class="hide">Sent!</span>
           <span class="help-block xlarge">{{ form.phone_code.help_text }}</span>
         </div>
       </div><!-- /clearfix -->
@@ -31,12 +38,13 @@
         <div class="input">
           {{ form.xmpp_code }}
           <a href="#" id="resend_xmpp" class="btn">Resend</a>
+          <span id="resend_xmpp_sent" class="hide">Sent!</span>
           <span class="help-block xlarge">{{ form.xmpp_code.help_text }}</span>
         </div>
       </div><!-- /clearfix -->
     </fieldset>
     <div class="actions">
-      <input type="submit" class="btn primary" value="Next step...">&nbsp;
+      <input type="submit" class="btn primary" value="Create account">&nbsp;
       <button type="reset" class="btn">Cancel</button>
     </div>
   </form>
@@ -51,8 +59,3 @@
     effective communication between people making real life decisions.
   </p>
 {% endblock sidebar %}
-
-{% block js_init %}{{ block.super }}
-  $('.content input[type="text"]').first().focus();
-  $("form .error input").first().focus();
-{% endblock js_init %}

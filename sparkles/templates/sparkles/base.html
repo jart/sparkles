@@ -83,18 +83,12 @@
   {% block scripts %}
     {% if debug %}
       <script src="{{ STATIC_URL }}js/jquery.js"></script>
-      <script src="{{ STATIC_URL }}sparkles/js/sparkles.coffee" type="text/coffeescript"></script>
       <script src="{{ STATIC_URL }}js/coffee-script.js"></script>
+      <script src="{{ STATIC_URL }}sparkles/js/sparkles.coffee" type="text/coffeescript"></script>
     {% else %}
       <script src="{{ STATIC_URL }}js/jquery.min.js"></script>
       <script src="{{ STATIC_URL }}sparkles/js/sparkles.min.js?v=1"></script>
     {% endif %}
   {% endblock scripts %}
-  <script>
-    $(function() {
-      {% block js_init %}
-      {% endblock js_init %}
-    });
-  </script>
 </body>
 </html>

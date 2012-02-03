@@ -35,3 +35,8 @@ pro:
 
 deps:
 	apt-get install -y python python-dev lessc uglifyjs
+
+newdb:
+	rm -f sparkles.sqlite3
+	make
+	sparkles createsuperuser --username=jart --email=jtunney@lobstertech.com

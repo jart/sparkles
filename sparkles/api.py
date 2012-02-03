@@ -47,7 +47,7 @@ def verify_email(email, **kwargs):
     if invalid:
         raise utils.APIException("invalid email address")
     code = db.base36(4)
-    db.EmailVerify.objects.create(email=email, code__iexact=code, ip=ip)
+    db.EmailVerify.objects.create(email=email, code=code, ip=ip)
     body = render_to_string('sparkles/email_verify.html', {'code': code})
     msg = mail.EmailMessage('Sparkles Email Verification Code', body,
                             'noreply@sparkles.org', [email])
@@ -60,7 +60,7 @@ def verify_phone(phone, **kwargs):
     phone = phonenumbers.parse(phone, 'US')
     if not phonenumbers.is_valid_number(phone):
         raise utils.APIException("Invalid phone number")
-    if phone.country_code != '1':
+    if phone.country_code != 1:
         raise utils.APIException('We only support US/CA numbers now :(')
     phone = utils.e164(phone)
     ip = _try_to_get_ip(kwargs)
@@ -78,7 +78,7 @@ def verify_phone(phone, **kwargs):
     if invalid:
         raise utils.APIException("invalid phone number")
     code = db.base36(4)
-    db.PhoneVerify.objects.create(phone=phone, code__iexact=code, ip=ip)
+    db.PhoneVerify.objects.create(phone=phone, code=code, ip=ip)
     message.sms_send(phone, 'sparkles phone auth code: ' + code)
     return []
 
@@ -99,6 +99,6 @@ def verify_xmpp(xmpp, **kwargs):
     if invalid:
         raise utils.APIException("invalid xmpp address")
     code = db.base36(4)
-    db.XmppVerify.objects.create(xmpp=xmpp, code__iexact=code, ip=ip)
+    db.XmppVerify.objects.create(xmpp=xmpp, code=code, ip=ip)
     message.xmpp_send(xmpp, 'sparkles xmpp auth code: ' + code)
     return []

@@ -41,7 +41,7 @@ def xmpp_client():
 def xmpp_send(to, content):
     from_ = settings.XMPP_JID
     logger.info("xmpp %s -> %s: %s", from_, to, content)
-    if not settings.DEBUG and not getattr(settings, 'TEST_MODE', False):
+    if not getattr(settings, 'TEST_MODE', False):
         xmpp_client().send(xmpp.Message(to, content))
     db.XmppMessage.objects.create(to_addr=to,
                                   from_addr=from_,
@@ -64,7 +64,7 @@ def sms_send(to, content):
     assert len(content) <= 160
     from_ = settings.TWILIO_PHONE
     logger.info("sms %s -> %s: %s", from_, to, content)
-    if not settings.DEBUG and not getattr(settings, 'TEST_MODE', False):
+    if not getattr(settings, 'TEST_MODE', False):
         twil = TwilioRestClient(settings.TWILIO_SID, settings.TWILIO_TOKEN)
         twil.sms.messages.create(to=to, from_=from_, body=content)
     db.SmsMessage.objects.create(to_addr=to,
