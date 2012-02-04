@@ -13,13 +13,16 @@
 Usage
 =====
 
-Install from git into a virtualenv::
+Install from git into a virtualenv.  Please note that you need Django 1.4 from
+git because it hasn't been released yet::
 
     sudo chmod go+rwt /opt  # let people create new files in /opt
     cd /opt
     virtualenv sparkles
-    cd sparkles/sparkles
-    source ../bin/activate
+    cd sparkles
+    source bin/activate
+    git clone git://github.com/django/django.git
+    pip install -e django
     git clone git://github.com/jart/sparkles.git
     cd sparkles
     make deps
