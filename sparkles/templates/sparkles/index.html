@@ -7,4 +7,22 @@
     <h2>It's better than voting</h2>
     <p>Deeper than a petty bitterness, no one cares why the shadows bleed, delivering me to swirling dust.  in the Hell my frenzy shall beg forgiveness.  oh my blood! the love! they drip my heart and flail madly with all my numbness. in the the gates of hell my torment shall fall limply...</p>
   </article>
+  <div class="pad"></div>
 {% endblock content %}
+
+{% block scripts %}{{ block.super }}
+  <script src="{{ STATIC_URL }}js/etherpad.js"></script>
+  <script>
+    $(function() {
+      $('.pad').pad({
+        'host': 'http://localhost:9001',
+        'padId': 'lolcat',
+        'width': '100%',
+        'height': '400px',
+        'showLineNumbers': true,
+        'showChat': true,
+        'userName': '{{ user.username.escapejs }}',
+      });
+    });
+  </script>
+{% endblock scripts %}
