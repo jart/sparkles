@@ -33,7 +33,7 @@ class AdminSite(admin.AdminSite):
 
 
 class ProposalAdmin(admin.ModelAdmin):
-    list_display = ('title', 'created', 'user')
+    list_display = ('title', 'created', 'workgroup')
     search_fields = ('title',)
     date_hierarchy = 'created'
     history_latest_first = True
