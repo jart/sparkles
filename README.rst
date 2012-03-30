@@ -35,3 +35,10 @@ How to run a debug server::
 How to run a non-debug server::
 
     make pro && sparkles runserver
+
+
+Credits
+=======
+
+Big thanks go to Michael White for helping with the vision and planning of
+this tool.

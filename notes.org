@@ -1,4 +1,8 @@
 * sprkl.us
+* Ideas
+** Group option to only allow notifications to go out on certain days
+** https://gist.github.com/2d0fd236b0a7f7e9581d Michael's Planning
+** Absolute voting bans you from group if decision goes against you
 * Justine's Hours
 ** System Design
    CLOCK: [2012-02-03 Fri 20:24]--[2012-02-03 Fri 20:28] =>  0:04
@@ -12,3 +16,45 @@
    CLOCK: [2012-01-30 Thu 12:00]--[2012-01-30 Thu 15:00] =>  3:00
    CLOCK: [2012-01-27 Thu 07:05]--[2012-01-27 Thu 09:05] =>  2:00
    CLOCK: [2012-01-26 Thu 17:42]--[2012-01-26 Thu 22:34] =>  4:52
+* Possible Tools / Libraries
+** https://github.com/campadrenalin/ConcurrenTree
+* Reading Material
+** [[http://goo.gl/odg3M][Why Liquid Democracy is not the answer (or: The talk-show effect)]]
+** [[http://www.marxists.org/archive/trotsky/1924/lessons/ch8.htm][Trotsky on the fetishization of organizational form]]
+** [[http://www.tandfonline.com/doi/abs/10.1080/00236561003654826][Book: The problem with networks theory]]
+** [[http://consensusbook.com/][Consensus Book]]
+** [[http://www.amazon.com/Roberts-Rules-Order-Newly-Revised/dp/0306820196/][Robert's Rules of Order]]
+** [[http://www.casagordita.com/consensus.htm][Consensus Description]]
+** [[http://libcom.org/files/consensus.pdf][Blocking Progress: Consensus Decision Making in the Anti-Nuclear Movement]]
+* Similar Projects
+** [[http://bettermeans.com/front/index.html][Better Means]] ([[https://github.com/Bettermeans/bettermeans][Source Code]]) ([[https://collaborate.occupy.net/][collaborate.occupy.net]])
+*** More project management focused than decision making
+*** Designed for medium sized organizations to replace organizational structure and redefine interpersonal relationships in the workplace
+*** Grades people with points for work performance :\
+*** Voting is anonymous, therefore not consensus driven :\
+*** No unified communication
+*** Wants you to vote on every little thing
+** [[https://hyperarchy.com/][Hyperarchy]]
+** [[http://directcongress.org/propose/][Fantasy Government]]
+** [[http://liquidfeedback.org/][Liquid Democracy]]
+*** Delegation system is essentially representative democracy
+** http://adhocracy.de/instance
+** http://mwhite.calepin.co/the-emerging-wisdom-revolution/
+** http://dev.liquidfeedback.org/test/index/login.html
+** http://www.youtube.com/watch?v=cdTUc9--LoU (time 1:07:00)
+** https://github.com/bradbeattie/python-vote-core
+** https://modernballots.com/
+* Trash
+
+    VARIANTS = (
+        ('consensus90', 'Modified Consensus'),
+        ('consensus', 'Strict Consensus'),
+        ('vote', 'Open Vote'),
+        ('ballot', 'Anonymous Vote'),
+    )
+    variant = models.CharField(max_length=255, choices=VARIANTS,
+                               default='consensus90')
+    is_public = models.BooleanField(help_text="""
+        This means that you don't need to be logged in and a member of the
+        work group to view the proposal. If your group is also public, then
+        the proposal will be listed for all to see on your group page.""")
