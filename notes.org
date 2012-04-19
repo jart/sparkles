@@ -5,6 +5,7 @@
 ** Absolute voting bans you from group if decision goes against you
 * Justine's Hours
 ** System Design
+   CLOCK: [2012-03-29 Thu 20:34]--[2012-03-29 Thu 23:50] =>  3:16
    CLOCK: [2012-02-03 Fri 20:24]--[2012-02-03 Fri 20:28] =>  0:04
    CLOCK: [2012-02-03 Fri 02:51]--[2012-02-03 Fri 04:30] =>  1:39
 ** Signup & Messaging
@@ -27,6 +28,14 @@
 ** [[http://www.casagordita.com/consensus.htm][Consensus Description]]
 ** [[http://libcom.org/files/consensus.pdf][Blocking Progress: Consensus Decision Making in the Anti-Nuclear Movement]]
 * Similar Projects
+** [[http://justify.media.mit.edu:9090/users/login][Justify from MIT]]
+
+   The guys who made this, I don't know what parallel universe they exist in
+   that made them think this design would be something that'd help people
+   communicate better. It's almost so bad that like, I feel bad disparaging
+   this software because it's as though i'm ridiculing a child for not
+   coloring inside the lines.
+
 ** [[http://bettermeans.com/front/index.html][Better Means]] ([[https://github.com/Bettermeans/bettermeans][Source Code]]) ([[https://collaborate.occupy.net/][collaborate.occupy.net]])
 *** More project management focused than decision making
 *** Designed for medium sized organizations to replace organizational structure and redefine interpersonal relationships in the workplace

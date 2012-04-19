@@ -17,7 +17,7 @@ dev:
 	pyflakes sparkles/api.py
 	pep8     sparkles/message.py
 	pyflakes sparkles/message.py
-	sparkles-dev syncdb
+	sparkles-dev syncdb --noinput
 	sparkles-dev migrate
 	sparkles-dev test sparkles
 	make -C doc html

@@ -9,6 +9,7 @@ r"""
 
 """
 
+import json
 import logging
 import functools
 
@@ -19,7 +20,7 @@ from django.contrib.auth.models import User
 
 
 logger = logging.getLogger(__name__)
-redis = redis.StrictRedis()
+redisc = redis.StrictRedis()
 rng = open('/dev/urandom')
 
 
@@ -49,6 +50,15 @@ def memoize(method):
 def base36(amt=7):
     choices = 'abcdefghijklmnopqrstuvwxyz0123456789'
     return ''.join([choices[ord(b) % 36] for b in rng.read(amt)])
+
+
+def user_dict(user):
+    return {
+        'id': user.id,
+        'email': user.username,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+    }
 
 
 class UserInfo(models.Model):
@@ -169,12 +179,14 @@ class Proposal(models.Model):
         return self.texts.order_by('-created')[0]
 
     def set_content(self, user, content):
-        ProposalText.objects.create(prop=self, user=user, content=content)
+        p = ProposalText.objects.create(prop=self, user=user, content=content)
+        p.publish()
 
     content = property(get_content, set_content)
 
     def log(self, user, content):
-        ProposalLog.objects.create(prop=self, user=user, content=content)
+        p = ProposalLog.objects.create(prop=self, user=user, content=content)
+        p.publish()
 
 
 class ProposalText(models.Model):
@@ -186,6 +198,17 @@ class ProposalText(models.Model):
     content = models.TextField(blank=True, help_text="""
         The text of the proposal in markdown""")
 
+    def publish(self):
+        redisc.publish('sparkles-event', json.dumps({
+            'channel': 'proposal-' + self.prop.sid,
+            'type': 'text',
+            'text': {
+                'content': self.content,
+                'created': self.created.strftime("%s"),
+                'user': user_dict(self.user),
+            }
+        }))
+
 
 class ProposalChat(models.Model):
     """Proposal text revisions"""
@@ -195,6 +218,17 @@ class ProposalChat(models.Model):
         When was this log entry emitted?""")
     content = models.TextField(help_text="""
         Arbitrary line of text in markdown""")
+
+    def publish(self):
+        redisc.publish('sparkles-event', json.dumps({
+            'channel': 'proposal-' + self.prop.sid,
+            'type': 'chat',
+            'chat': {
+                'content': self.content,
+                'created': self.created.strftime("%s"),
+                'user': user_dict(self.user),
+            }
+        }))
 
 
 class ProposalLog(models.Model):
@@ -206,14 +240,27 @@ class ProposalLog(models.Model):
     content = models.TextField(help_text="""
         Arbitrary line of text in markdown""")
 
+    def publish(self):
+        redisc.publish('sparkles-event', json.dumps({
+            'channel': 'proposal-' + self.prop.sid,
+            'type': 'log',
+            'log': {
+                'content': self.content,
+                'created': self.created.strftime("%s"),
+                'user': user_dict(self.user),
+            }
+        }))
+
 
 class ProposalVote(models.Model):
     """A person's vote and justification with revisions"""
     VOTES = (
-        ('', 'Unanswered'),
-        ('good', 'Sparkles'),
-        ('middle', 'Middling'),
+        ('', 'Pending'),
+        ('absgood', 'Absolute Support'),
+        ('good', 'Support'),
+        ('mid', 'Middling'),
         ('bad', 'Opposed'),
+        ('absbad', 'Absolute Oppose'),
         ('abstain', 'Abstain'),
     )
 
@@ -225,6 +272,18 @@ class ProposalVote(models.Model):
         How do you feel?""")
     content = models.TextField(blank=True, help_text="""
         Why do you feel this way?""")
+
+    def publish(self):
+        redisc.publish('sparkles-event', json.dumps({
+            'channel': 'proposal-' + self.prop.sid,
+            'type': 'vote',
+            'vote': {
+                'vote': self.vote,
+                'content': self.content,
+                'created': self.created.strftime("%s"),
+                'user': user_dict(self.user),
+            }
+        }))
 
 
 class EmailBlacklist(models.Model):
