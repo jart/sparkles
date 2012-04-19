@@ -10,18 +10,18 @@
   <link rel="canonical" href="{% block canonical %}{{ request.path }}{% endblock canonical %}" />
   {% if debug %}
     <link href="{{ STATIC_URL }}sparkles/css/sparkles.less" rel="stylesheet" type="text/less" media="all" />
-    <script src="{{ STATIC_URL }}js/less.js"></script>
+    <script src="{{ STATIC_URL }}js/less.min.js"></script>
   {% else %}
     <link href="{{ STATIC_URL }}sparkles/css/sparkles.min.css" rel="stylesheet" type="text/css" media="all" />
   {% endif %}
+  <script src="{{ STATIC_URL }}js/modernizr{% if not debug %}.min{% endif %}.js"></script>
   {% block extra_head %}
   {% endblock extra_head %}
 </head>
-<body class="conapp {% block body_class %}{% endblock %}">
+<body class="design {% block body_class %}{% endblock %}">
   {% block body %}
-
-    <nav class="topbar">
-      <div class="fill">
+    <nav class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
         <div class="container">
           <a class="brand" href="/">Sparkles!</a>
           <ul class="nav">
@@ -36,15 +36,35 @@
             <li class="{% block nav_about_class %}{% endblock %}"><a href="/about/">About</a></li>
           </ul>
           {% if not user.is_authenticated %}
-            <form action="/login/" method="post" class="pull-right">{% csrf_token %}
-              <input class="input-small" type="text" name="username" placeholder="Username">
-              <input class="input-small" type="password" name="password" placeholder="Password">
-              <button class="btn primary" type="submit">Sign in</button>
-            </form>
+            <ul class="nav pull-right">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Log In <b class="caret"></b></a>
+                <ul class="dropdown-menu login">
+                  <form action="{% url login %}" method="post">{% csrf_token %}
+                    <label for="login-username">Email</label>
+                    <input class="span2" type="text" name="username" id="login-username" placeholder="Email">
+                    <label for="login-password">Passphrase</label>
+                    <input class="span2" type="password" name="password" id="login-password" placeholder="Passphrase">
+                    <button class="btn primary" type="submit">Sign in</button>
+                  </form>
+                  <small><a href="{% url password_reset %}">Forgot password</a></small>
+                </ul>
+              </li>
+            </ul>
           {% else %}
-            <ul class="nav secondary-nav">
-              <li><a class="userlink" href="/{{ user.username }}/">{% gravatar user 16 %} {{ user.username }}</a></li>
-              <li><a href="/logout/">Logout</a></li>
+            <ul class="nav pull-right">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  {% gravatar user 16 %} {{ user.username }}
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="userlink" href="#">My Account</a></li>
+                  <li><a class="userlink" href="{% url password_change %}">Change Password</a></li>
+                  <li class="divider"></li>
+                  <li><a class="userlink" href="{% url logout %}">Log Out</a></li>
+                </ul>
+              </li>
             </div>
           {% endif %}
         </div>
@@ -52,42 +72,34 @@
     </nav>
 
     <div class="container">
-
-      <div class="content">
-        <header class="page-header">{% block page_header %}
-          <h1>
-            {% block page_title %}Sparkles{% endblock %}
-            <img src="{{ STATIC_URL }}sparkles/img/favicon.png" width="16" height="16" />
-            <small>{% block page_subtitle %}A Consensus Building Decision Making Tool{% endblock %}</small>
-          </h1>
-        {% endblock page_header %}</header>
-        <div class="row">
-          <div class="span12">
-            {% block content %}
-            {% endblock content %}
-          </div>
-          <div class="span4">
-            {% block sidebar %}
-            {% endblock sidebar %}
-          </div>
-        </div>
-      </div>
-
+      {% block content %}{% endblock content %}
       <footer>
-        <p>&copy; Occupy Solidarity Network 2012</p>
+        <p>&copy; Justine Alexandra Roberts Tunney 2012</p>
       </footer>
-
-    </div> <!-- /container -->
+    </div>
 
   {% endblock body %}
   {% block scripts %}
     {% if debug %}
       <script src="{{ STATIC_URL }}js/jquery.js"></script>
-      <script src="{{ STATIC_URL }}js/coffee-script.js"></script>
+      <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-transition.js"></script>
+      <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-alert.js"></script>
+      <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-modal.js"></script>
+      <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-dropdown.js"></script>
+      <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-scrollspy.js"></script>
+      <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-tab.js"></script>
+      <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-tooltip.js"></script>
+      <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-popover.js"></script>
+      <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-button.js"></script>
+      <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-collapse.js"></script>
+      <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-carousel.js"></script>
+      <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-typeahead.js"></script>
+      <script src="{{ STATIC_URL }}js/coffee-script.min.js"></script>
       <script src="{{ STATIC_URL }}sparkles/js/sparkles.coffee" type="text/coffeescript"></script>
     {% else %}
       <script src="{{ STATIC_URL }}js/jquery.min.js"></script>
-      <script src="{{ STATIC_URL }}sparkles/js/sparkles.min.js?v=1"></script>
+      <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+      <script src="{{ STATIC_URL }}sparkles/js/sparkles.min.js"></script>
     {% endif %}
   {% endblock scripts %}
 </body>

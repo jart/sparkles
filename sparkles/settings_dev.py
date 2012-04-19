@@ -4,7 +4,7 @@ from sparkles.settings import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-STATIC_URL = "/static-dev/"
+STATIC_URL = "/static/"
 
 TEMPLATE_LOADERS = [
     "django.template.loaders.filesystem.Loader",

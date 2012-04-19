@@ -1,31 +1,42 @@
 {% extends "sparkles/base.html" %}
 {% block title %}Signup for an Account | {{ block.super }}{% endblock %}
-{% block page_title %}Sign Up for an Account{% endblock %}
-{% block page_subtitle %}We're pleased to meet you{% endblock %}
 {% block body_class %}signup{% endblock %}
 {% block nav_signup_class %}active{% endblock %}
 
 {% block content %}
-  <style>fieldset { padding-top: 0; }</style>
-  <form action="." method="post">{% csrf_token %}
-    {% include "sparkles/form_errors.html" %}
-    {% include "sparkles/form_fields.html" %}
-    <div class="actions">
-      <input type="submit" class="btn primary" value="Next step...">&nbsp;
-      <button type="reset" class="btn">Cancel</button>
-    </div>
-  </form>
+  <div class="content">
+    <header class="page-header">
+      <h1>
+        Sign Up for an Account
+        <img src="{{ STATIC_URL }}sparkles/img/favicon.png" width="16" height="16" />
+        <small>We're pleased to meet you</small>
+      </h1>
+    </header>
+    <div class="row">
+      <div class="span9">
+        <form class="form-horizontal" action="." method="post">{% csrf_token %}
+          {% include "sparkles/form_errors.html" %}
+          <fieldset>
+            {% include "sparkles/form_fields.html" %}
+            <div class="form-actions">
+              <input type="submit" class="btn btn-primary" value="Next step...">&nbsp;
+              <button type="reset" class="btn">Cancel</button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+      <div class="span3">
+        <p><img src="http://i.imgur.com/zUDh3.jpg" /></p>
+        <h3>Why so many questions?</h3>
+        <p>
+          We require personal contact information because this is a tool for people
+          who're serious.  We're not going to sell it, we simply want to provide
+          effective communication between people making real life decisions.
+        </p>
+      </div>
+    </div> <!-- /row -->
+  </div>
 {% endblock content %}
-
-{% block sidebar %}
-  <p><img src="http://i.imgur.com/zUDh3.jpg" /></p>
-  <h3>Why so many questions?</h3>
-  <p>
-    We require personal contact information because this is a tool for people
-    who're serious.  We're not going to sell it, we simply want to provide
-    effective communication between people making real life decisions.
-  </p>
-{% endblock sidebar %}
 
 {% block js_init %}{{ block.super }}
   $("input").first().focus();

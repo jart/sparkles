@@ -1,4 +1,6 @@
 $ ->
+  $(".login form").click (ev) ->
+    ev.stopPropagation()
   $("#resend_email").click (ev) ->
     ev.preventDefault()
     api "/api/verify_email/", email: g_email, (data) ->

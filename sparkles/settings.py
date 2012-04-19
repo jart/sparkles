@@ -99,6 +99,7 @@ TEMPLATE_CONTEXT_PROCESSORS = [
 ]
 
 INSTALLED_APPS = [
+    "sparkles",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     'django.contrib.staticfiles',
@@ -106,7 +107,6 @@ INSTALLED_APPS = [
     "django.contrib.admin",
     "south",
     "gravatar",
-    "sparkles",
 ]
 
 PASSWORD_HASHERS = [

@@ -2,12 +2,26 @@
 {% block title %}Sparkles! | A Consensus Building Decision Making Tool{% endblock title %}
 {% block body_class %}index{% endblock body_class %}
 {% block nav_home_class %}active{% endblock %}
+
 {% block content %}
-  <article>
-    <h2>It's better than voting</h2>
-    <p>Deeper than a petty bitterness, no one cares why the shadows bleed, delivering me to swirling dust.  in the Hell my frenzy shall beg forgiveness.  oh my blood! the love! they drip my heart and flail madly with all my numbness. in the the gates of hell my torment shall fall limply...</p>
-  </article>
-  <div class="pad"></div>
+  <div class="content">
+    <header class="page-header">
+      <h1>
+        Sparkles
+        <img src="{{ STATIC_URL }}sparkles/img/favicon.png" width="16" height="16" />
+        <small>A Consensus Building Decision Making Tool</small>
+      </h1>
+    </header>
+    <div class="row">
+      <div class="span12">
+        <article>
+          <h2>It's better than voting</h2>
+          <p>Deeper than a petty bitterness, no one cares why the shadows bleed, delivering me to swirling dust.  in the Hell my frenzy shall beg forgiveness.  oh my blood! the love! they drip my heart and flail madly with all my numbness. in the the gates of hell my torment shall fall limply...</p>
+          <div class="pad"></div>
+        </article>
+      </div>
+    </div> <!-- /row -->
+  </div>
 {% endblock content %}
 
 {% block scripts %}{{ block.super }}

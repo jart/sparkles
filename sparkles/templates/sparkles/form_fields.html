@@ -1,11 +1,19 @@
-<fieldset>
-  {% for field in form %}
-    <div class="clearfix {% if field.errors %}error{% endif %}">
-      {{ field.label_tag }}
-      <div class="input">
-        {{ field }}
-        <span class="help-block xlarge">{{ field.help_text }}</span>
-      </div>
-    </div><!-- /clearfix -->
-  {% endfor %}
-</fieldset>
+{% for field in form %}
+  <div class="control-group {% if field.errors %}error{% endif %}">
+    <label class="control-label" for="id_{{ field.name }}">{{ field.label }}</label>
+    <div class="controls">
+      {{ field }}
+      {% if field.errors %}
+        <span class="help-inline">
+          {% for error in field.errors %}
+            {{ error }}
+          {% endfor %}
+        </span>
+      {% else %}
+        {% if field.help_text %}
+          <p class="help-block">{{ field.help_text }}</p>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+{% endfor %}

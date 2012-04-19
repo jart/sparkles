@@ -1,0 +1,35 @@
+{% extends "newpass/base.html" %}
+{% block title %}Log In | {{ block.super }}{% endblock %}
+{% block page_title %}Log In{% endblock %}
+{% block body_class %}login{% endblock %}
+
+{% block content %}
+  <div class="content">
+    <header class="page-header">
+      <h1>User Portal</h1>
+    </header>
+    <div class="row">
+      <div class="span6">
+        <form id="login_form" action="." method="post">{% csrf_token %}
+          {% include "newpass/form_errors.html" %}
+          <fieldset>
+            <legend>Log In</legend>
+            {% include "newpass/form_fields.html" %}
+            <div>
+              <input type="submit" class="btn btn-primary" value="Submit">&nbsp;
+              <button type="reset" class="btn">Cancel</button>
+            </div>
+          </fieldset>
+        </form>
+        <p>
+          <a href="{% url password_reset %}">Forgot Password?</a>
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block js_init %}{{ block.super }}
+  $("input").first().focus();
+  $("form .error input").first().focus();
+{% endblock js_init %}
