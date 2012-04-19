@@ -1,4 +1,4 @@
-{% extends "newpass/base.html" %}
+{% extends "sparkles/base.html" %}
 {% block title %}Log In | {{ block.super }}{% endblock %}
 {% block page_title %}Log In{% endblock %}
 {% block body_class %}login{% endblock %}
@@ -11,10 +11,10 @@
     <div class="row">
       <div class="span6">
         <form id="login_form" action="." method="post">{% csrf_token %}
-          {% include "newpass/form_errors.html" %}
+          {% include "sparkles/form_errors.html" %}
           <fieldset>
             <legend>Log In</legend>
-            {% include "newpass/form_fields.html" %}
+            {% include "sparkles/form_fields.html" %}
             <div>
               <input type="submit" class="btn btn-primary" value="Submit">&nbsp;
               <button type="reset" class="btn">Cancel</button>

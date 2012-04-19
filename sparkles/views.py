@@ -19,26 +19,28 @@ from sparkles import utils, api, models as db
 
 
 class SignupForm(forms.Form):
-    username = forms.RegexField(
-        label="My Name", max_length=12, regex=r'^[a-zA-Z][a-zA-Z0-9]{3,12}$',
-        help_text=("Letters and digits only, 3-12 characters. "
-                   "PLEASE PICK A USERNAME PEOPLE WILL UNDERSTAND. For "
-                   "example if your friends know you as Tyler Durden, then "
-                   "your username should be TylerDurden."),
-        error_messages={'required': 'Please pick a username',
-                        'invalid': ("Please enter only letters and digits in "
-                                    "your username between 3 and 12 chars.")})
+    email = forms.EmailField(
+        label='Email', required=True, help_text="Also used for logging in",
+        error_messages={'required': 'Please enter your email address',
+                        'invalid': "Please enter a valid email address"})
+    first_name = forms.RegexField(
+        label='First Name', max_length=40, regex=r"^[-' a-zA-Z0-9]+$",
+        error_messages={'required': 'Please enter your first name',
+                        'invalid': ('Invalid first name.  Please use only '
+                                    'letters, digits, hyphens, and '
+                                    'apostrophes. Max 40 chars')})
+    last_name = forms.RegexField(
+        label='Last Name', max_length=40, regex=r"^[-' a-zA-Z0-9]+$",
+        help_text="Please use your real name",
+        error_messages={'required': 'Please enter your last name',
+                        'invalid': ('Invalid last name.  Please use only '
+                                    'letters, digits, hyphens, and '
+                                    'apostrophes. Max 40 chars')})
     password = forms.CharField(
         label="Passphrase", widget=forms.PasswordInput,
-        min_length=6, max_length=128, help_text="At least 6 characters",
+        min_length=8, max_length=128, help_text="At least 8 characters",
         error_messages={'required': 'Please choose a password',
-                        'invalid': ("Please enter only letters and digits in "
-                                    "your username between 3 and 12 chars.")})
-    email = forms.EmailField(
-        label='Email', help_text="Required. Email Alerts & Verification",
-        widget=forms.TextInput(attrs={'placeholder': 'you@domain.com'}),
-        error_messages={'required': 'Please enter your email address',
-                        'invalid': 'Bad email address'})
+                        'invalid': "Must be 8 to 128 characters"})
     phone = forms.CharField(
         label='Mobile Phone',
         help_text='Required. Verification & SMS Alerts (US/CA only)',
@@ -50,12 +52,6 @@ class SignupForm(forms.Form):
         help_text="Optional. XMPP/Jabber Instant Message Alerts",
         widget=forms.TextInput(attrs={'placeholder': 'you@jabber.org'}),
         error_messages={'invalid': 'Bad xmpp address'})
-
-    def clean_username(self):
-        username = self.data.get('username')
-        if db.is_used(username):
-            raise forms.ValidationError("Username is taken")
-        return username
 
     def clean_email(self):
         email = self.data.get('email')
@@ -173,12 +169,12 @@ def signup_verify(request):
         if form.is_valid():
             data = request.session['signup']
             user = db.User.objects.create_user(
-                data['username'], data['email'], data['password'])
+                data['email'], data['email'], data['password'])
             user.userinfo.phone = data['phone']
             user.userinfo.xmpp = data['xmpp']
             user.userinfo.save()
             if not request.user.is_authenticated():
-                user = auth.authenticate(username=data['username'],
+                user = auth.authenticate(username=data['email'],
                                          password=data['password'])
                 auth.login(request, user)
             del request.session['signup']
