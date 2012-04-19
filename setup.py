@@ -22,7 +22,7 @@ setup(
     author               = "Justine Tunney",
     author_email         = "jtunney@lobstertech.com",
     license              = "GNU AGPL v3 or later",
-    install_requires     = ["Django", "south", "django-gravatar", 'redis',
+    install_requires     = ["Django>=1.4", "south", "django-gravatar", 'redis',
                             "python-memcached", "django-debug-toolbar",
                             "py-bcrypt", "twilio", "xmpppy", "pydns",
                             "phonenumbers"],

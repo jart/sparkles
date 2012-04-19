@@ -13,19 +13,22 @@
 Usage
 =====
 
-Install from git into a virtualenv.  Please note that you need Django 1.4 from
-git because it hasn't been released yet::
+Make sure you're on a debian/ubuntu system and then install these deps::
+
+    sudo ./install-redis.sh 2.4.10
+    sudo ./install-nodejs.sh 0.6.15
+	sudo apt-get install -y python python-dev
+	sudo npm install -g less coffee-script coffeelint uglify-js
+
+Install from git into a virtualenv::
 
     sudo chmod go+rwt /opt  # let people create new files in /opt
     cd /opt
     virtualenv sparkles
     cd sparkles
     source bin/activate
-    git clone git://github.com/django/django.git
-    pip install -e django
     git clone git://github.com/jart/sparkles.git
     cd sparkles
-    make deps
     make
 
 How to run a debug server::

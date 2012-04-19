@@ -17,7 +17,8 @@ dev:
 	pyflakes sparkles/api.py
 	pep8     sparkles/message.py
 	pyflakes sparkles/message.py
-	sparkles-dev syncdb --noinput
+	coffeelint sparkles/static/sparkles/js/*.coffee
+	sparkles-dev syncdb
 	sparkles-dev migrate
 	sparkles-dev test sparkles
 	make -C doc html
@@ -29,12 +30,14 @@ pro:
 	lessc -x sparkles/static/sparkles/css/sparkles.less \
 		sparkles/static/sparkles/css/sparkles.min.css
 	coffee -o sparkles/static/sparkles/js \
-		sparkles/static/sparkles/js/sparkles.coffee
+		sparkles/static/sparkles/js/*.coffee
+	uglifyjs -o sparkles/static/sparkles/js/sparkles.min.js \
+		sparkles/static/sparkles/js/sparkles.js
+	make -C sparkles/static/bootstrap bootstrap
+	cp sparkles/static/bootstrap/bootstrap/js/bootstrap.min.js \
+		sparkles/static/js
 	sparkles migrate
 	sparkles collectstatic --noinput
-
-deps:
-	apt-get install -y python python-dev lessc coffeescript
 
 newdb:
 	rm -f sparkles.sqlite3
