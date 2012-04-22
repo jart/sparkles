@@ -17,8 +17,8 @@ Make sure you're on a debian/ubuntu system and then install these deps::
 
     sudo ./install-redis.sh 2.4.10
     sudo ./install-nodejs.sh 0.6.15
-	sudo apt-get install -y python python-dev
-	sudo npm install -g less coffee-script coffeelint uglify-js
+    sudo apt-get install -y python python-dev
+    sudo npm install -g less coffee-script coffeelint uglify-js
 
 Install from git into a virtualenv::
 
